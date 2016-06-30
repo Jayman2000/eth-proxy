@@ -35,14 +35,14 @@ def setup():
             yield (varname, value)
 
     import config_default
+    import sys
     
-    if os.path.isfile('eth-proxy.conf'):
-        config = open('eth-proxy.conf','r').readlines()
+    if os.path.isfile(sys.path[0]+'/eth-proxy.conf'):
+        config = open(sys.path[0]+'/eth-proxy.conf','r').readlines()
     else:
         # Custom config not presented, but we can still use defaults
         config = None
             
-    import sys
     module = sys.modules[__name__]
     
     for name,value in read_values(config_default):
@@ -56,8 +56,8 @@ def setup():
                     changes["LOGLEVEL"] = "DEBUG"
                     module.__dict__["LOGLEVEL"] = "DEBUG"
                 if name=="LOG_TO_FILE" and value:
-                    changes["LOGFILE"] = "proxy.log"
-                    module.__dict__["LOGFILE"] = "proxy.log"
+                    changes["LOGFILE"] = sys.path[0]+"proxy.log"
+                    module.__dict__["LOGFILE"] = sys.path[0]+"proxy.log"
                 changes[name] = value
             module.__dict__[name] = value
 
